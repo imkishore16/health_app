@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 // BMI CALCULATOR ON-PRESSED
 class BMIpage extends StatefulWidget {
-  //const BMIpage({ Key? key }) : super(key: key);
+  const BMIpage({ Key? key }) : super(key: key);
   @override
   _BMIpageState createState() => _BMIpageState();
 }
@@ -16,10 +16,10 @@ enum Gender { male, female }
 
 class _BMIpageState extends State<BMIpage> {
   
-  Gender? _character = Gender.male;
-  //BestTutorSite _site = BestTutorSite.javatpoint;
-  var gender=['male' , 'female'];
-  var itemSelected ;
+  
+  Gender? _male = Gender.male;  
+   
+  
   var displayBMI ='';
   var data=['Severe  Thinness	< 16',"Moderate Thinness	16 - 17","Mild Thinness	17 - 18.5  "," Normal	18.5 - 25  "," Overweight	25 - 30  ","Obese Class I	30 - 35   ","Obese Class II 35 - 40   ","Obese Class III > 40   "];
   
@@ -30,6 +30,7 @@ class _BMIpageState extends State<BMIpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+         
       appBar:AppBar(
         title: const Text('BMI CALCULATOR'),
       ),
@@ -42,22 +43,29 @@ class _BMIpageState extends State<BMIpage> {
               height:30.0,
               width:5.0,
             )
-            ),
+            ),  
+
+
           Expanded(
             child: Padding(
-             padding:(const EdgeInsets.only(left:30.0,right:290.0)),
-             child:ListTile(
+             padding:(const EdgeInsets.only(left:30.0,right:20.0)),
+             child:Container(
+               height:50,
+               width: 50,
+               child:ListTile(
           title: const Text('male'),
           leading: Radio<Gender>(
             value: Gender.male,
-            groupValue: _character,
+            groupValue: _male,
             onChanged: (Gender? value) {
               setState(() {
-                _character = value;
+                _male= value;
               });
             },
           ),
         ),
+             )
+             
 
         
              
@@ -78,7 +86,7 @@ class _BMIpageState extends State<BMIpage> {
               //   },
               //  hint: //const Align(
               //    const Text("gender"),
-              // //)
+              // ) 
               //   value:itemSelected,
               // )
               ),
@@ -87,19 +95,22 @@ class _BMIpageState extends State<BMIpage> {
 
           Expanded(
             child: Padding(
-             padding:(const EdgeInsets.only(left:30.0,right:290.0)),
-             child:ListTile(
+             padding:(const EdgeInsets.only(left:30.0,right:20.0)),
+             child:Container(height:50,
+               width: 50,
+               child:ListTile(
           title: const Text('female'),
           leading: Radio<Gender>(
             value: Gender.female,
-            groupValue: _character,
+            groupValue: _male,
             onChanged: (Gender? value) {
               setState(() {
-                _character = value;
+                _male = value;
               });
             },
           ),
         ),
+             )
             ),
           ), 
            
@@ -153,6 +164,11 @@ class _BMIpageState extends State<BMIpage> {
                     minimumSize: MaterialStateProperty.all<Size>(super(3.0, 3,0)),
                   ),*/
                 onPressed:(){
+                   FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
                 setState(() {
                         displayBMI=calculateBMI();
                       });
@@ -192,7 +208,7 @@ class _BMIpageState extends State<BMIpage> {
 
 //TABLE
             Padding(
-              padding:EdgeInsets.only(top:10.0,bottom:10.0,left:30.0,right:30.0),
+              padding:EdgeInsets.only(top:10.0,bottom:10.0,left:50.0,right:50.0),
             child:Table(
   border: TableBorder.all(width: 1.2, color: Colors.blue,borderRadius:BorderRadius.circular(4.8),),
   

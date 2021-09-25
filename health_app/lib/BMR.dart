@@ -15,13 +15,12 @@ enum Gender {male,female}
 
 class BMRpageState extends State<BMRpage> {
   
-    Gender? _character = Gender.male;
+  Gender? _gender = Gender.male;
   var gender=['male' , 'female'];
-  //var itemSelected ;
   var displayBMR ='';
   var exercise=['Sedentary:Little or no exercise' , ' Light :Exercise 1-3 times per week ', 'Moderate :4-5 times per week ', 'Active :daily exercise or intense exercise 3-4 times a week ',' Very Active:intense exercise 6-7 times a week ',' Extra Active : very intense exercise daily or physical job  '];
-  var itemSelected = '';
-  var itemSelected2='';
+  var itemSelected ;
+  //var itemSelected2='';
   
   TextEditingController heightController=TextEditingController();
   TextEditingController weightController=TextEditingController();
@@ -30,13 +29,22 @@ class BMRpageState extends State<BMRpage> {
   
   @override
   Widget build(BuildContext context) {
+    //final urlImage='https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.alamy.com%2Fstock-photo%2Fbmi-body-mass.html&psig=AOvVaw08xsO-IFB7tu7LeFFNf7up&ust=1631783146904000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCMCfgYrQgPMCFQAAAAAdAAAAABAD';
     return Scaffold(
       appBar:AppBar(
         title: const Text('BMR CALCULATOR'),
       ),
-      body:ListView(
+      
+      body:Container(
+            decoration:BoxDecoration(
+              image:DecorationImage(
+                image:AssetImage('assets/backgroung.jpg'),
+                fit:BoxFit.cover,
+              ),
+            ),  
+            child:ListView(
         children:<Widget>[
-
+         // Container()
           Padding(
           padding:const EdgeInsets.only(top:10.0,),
             child:Container(
@@ -44,62 +52,49 @@ class BMRpageState extends State<BMRpage> {
               width:5.0,
             )
             ),
-          
-        Expanded(
+
+            Expanded(
             child: Padding(
-             padding:(const EdgeInsets.only(left:30.0,right:290.0)),
-             child:ListTile(
+             padding:(const EdgeInsets.only(left:30.0,right:20.0)),
+             child:Container(height:50,
+               width: 50,
+               child:ListTile(
           title: const Text('male'),
           leading: Radio<Gender>(
             value: Gender.male,
-            groupValue: _character,
+            groupValue: _gender,
             onChanged: (Gender? value) {
               setState(() {
-                _character = value;
+                _gender = value;
               });
             },
           ),
         ),
-            ),
-          ), 
-
-          Expanded(
-            child: Padding(
-             padding:(const EdgeInsets.only(left:30.0,right:290.0)),
-             child:ListTile(
-          title: const Text('female'),
-          leading: Radio<Gender>(
-            value: Gender.female,
-            groupValue: _character,
-            onChanged: (Gender? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
+             )
             ),
           ),
           
-
-          //  Padding(
-          //    padding:(const EdgeInsets.only(left:25.0)),
-          //    child:
-
-          //     DropdownButton<String>(
-          //       items:gender.map((String dropDownStringItem){
-          //         return DropdownMenuItem<String>(
-          //           value:dropDownStringItem,
-          //           child:Text(dropDownStringItem),
-          //         );
-          //       }).toList(),
-          //       value:itemSelected1,
-          //       onChanged:(newValueSelected1) {
-          //         onDropDownItemSelected(newValueSelected1);
-          //       },
-          //     )
-          //     ),
-
+        Expanded(
+            child: Padding(
+             padding:(const EdgeInsets.only(left:30.0,right:20.0)),
+             child:Container(height:50,
+               width: 50,
+               child:ListTile(
+          title: const Text('female'),
+          leading: Radio<Gender>(
+            value: Gender.female,
+            groupValue: _gender,
+            onChanged: (Gender? value) {
+              setState(() {
+                _gender = value;
+              });
+            },
+          ),
+        ),
+             )
+            ),
+          ), 
+  
            Padding(
             padding:(const EdgeInsets.only(top:5.0,bottom:5.0)),
             child: TextField(
@@ -155,33 +150,77 @@ class BMRpageState extends State<BMRpage> {
                     child:Text(dropDownStringItem),
                   );
                 }).toList(),
-                value:itemSelected,
+                underline:const SizedBox(),
                 onChanged:(newValueSelected) {
-                  itemSelected=newValueSelected!;
+                  setState(() {
+                    itemSelected=newValueSelected!;
+                  });
                 },
+                hint: const Text("exercise"),
+                value:itemSelected,
               )),
               ),
 
 
-              Expanded(
+             Padding(
+                  padding:const EdgeInsets.only(left:90.0,right:90.0,bottom:20,top:20.0),
                 child:ElevatedButton(
                   child:const Text(
                     'CALCULATE',
                     textScaleFactor: 1.0,
                     style:TextStyle(color:Colors.black,fontStyle:FontStyle.italic),
                   ),
-                   onPressed:(){
-                      setState(() {
-                        displayBMR=calculateBMR();
+                  style:ElevatedButton.styleFrom(
+                    primary: Colors.blueAccent,
+                    side: const BorderSide(width:1, color:Colors.black), 
+                    elevation: 5, 
+                  ),   
+                onPressed:(){
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        } 
+                setState(() {
+                        displayBMR=calculateBMR()!;
                       });
                     }
-
                 )
-              ),
+              )   ,
+
+              Padding(
+                  padding:const EdgeInsets.only(left:90.0,right:90.0,bottom:20),
+                child:ElevatedButton(
+                  child:const Text(
+                    'RESET',
+                    textScaleFactor: 1.0,
+                    style:TextStyle(color:Colors.black,fontStyle:FontStyle.italic),
+                  ),
+                  style:ElevatedButton.styleFrom(
+                    primary: Colors.blueAccent,
+                    side: const BorderSide(width:1, color:Colors.black), 
+                    elevation: 5, 
+                  ),
+                onPressed:(){
+                setState(() {
+                        reset();
+                      });
+                    }
+                )
+              )   ,
+
+                Expanded(child:Padding(
+                padding:const EdgeInsets.all(8.0),
+                child:Text(displayBMR,
+                
+                style:const TextStyle(color:Colors.black,fontSize:18.0,fontStyle:FontStyle.italic)
+                ),
+              ),),
 
 
         ],
       )
+          ),
     );
   }
 
@@ -191,21 +230,34 @@ class BMRpageState extends State<BMRpage> {
     }
   }
 
-  String calculateBMR() {
+  String? calculateBMR() {
     double height =double.parse(heightController.text);
     double weight =double.parse(weightController.text);
     double age =double.parse(ageController.text);
-    var male =5;
-    var female= -161;
-    var Gender=[male,female];
 
-    double BMR = (10*weight)+(6.2*height)-(5*age);
-    String result= "your BMR is $BMR";
+
+  if(_gender == Gender.male){
+    double BMR = (10*weight)+(6.2*height)-(5*age)+5;
+    var value=BMR.round();
+    String result= "BMR = $BMR calories/day";
     return result;
-      
-
-  
+  }
+  else() {
+    double BMR = (10*weight)+(6.2*height)-(5*age)-161;
+    var value=BMR.round();
+    String result= "BMR = $BMR calories/day";
+    return result;
+  };
+    
+    //String result= "your BMR is $BMR";
+    //return result;  
   }
 
+  reset() {
+    heightController.text='';
+    weightController.text='';
+    ageController.text='';
+    displayBMR='';
+  }
 }
 
