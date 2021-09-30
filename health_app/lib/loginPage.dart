@@ -1,4 +1,6 @@
 // ignore_for_file: file_names
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:health_app/boxes.dart';
 import 'package:health_app/loginData.dart';
 import 'package:flutter/material.dart';
 import 'package:health_app/home.dart';
@@ -15,8 +17,8 @@ class loginPage extends StatefulWidget {
 }
  
 class _loginPageState extends State<loginPage> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  //TextEditingController nameController = TextEditingController();
+  //TextEditingController passwordController = TextEditingController();
   
   // To delete a box
   // @override
@@ -27,21 +29,32 @@ class _loginPageState extends State<loginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home:Scaffold(
         appBar: AppBar(
+          backgroundColor:Colors.green,
           title:const  Text('Health App'),
         ),
-        body: Padding(
+        body:
+         Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(
               children: <Widget>[
+                ValueListenableBuilder<Box<LoginData>>(
+          valueListenable:Boxes.getData().listenable(),
+          builder:(context,box,_) {
+            final data=box.values.toList().cast<LoginData>();
+            return buildContent(data);
+          },
+        ), 
                 Padding(
                   padding:const EdgeInsets.only(top:15.0),
                   child:Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
                     child:const  Text(
-                      'Sign in',
+                      'Details',
                       style: TextStyle(fontSize: 20),
                     )),
                 ),
@@ -49,10 +62,10 @@ class _loginPageState extends State<loginPage> {
                 Container(
                   padding:const  EdgeInsets.all(10),
                   child: TextField(
-                    controller: nameController,
+                    //controller: nameController,
                     decoration:const  InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'User Name',
+                      labelText: 'Name',
                     ),
                   ),
                 ),
@@ -60,20 +73,34 @@ class _loginPageState extends State<loginPage> {
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextField(
                     obscureText: true,
-                    controller: passwordController,
+                    //controller: passwordController,
                     decoration:const  InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Password',
+                      labelText: 'age',
                     ),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder:(context)=> MainScreen()));
-                    //forgot password screen
-                  },
-                  //textStyle: Colors.blue,
-                  child:const  Text('Forgot Password'),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: TextField(
+                    obscureText: true,
+                    //controller: passwordController,
+                    decoration:const  InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'height',
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: TextField(
+                    obscureText: true,
+                    //controller: passwordController,
+                    decoration:const  InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'weight',
+                    ),
+                  ),
                 ),
                 Container(
                   height: 50,
@@ -84,40 +111,31 @@ class _loginPageState extends State<loginPage> {
                     side: const BorderSide(width:1, color:Colors.black), 
                     elevation: 5, 
                   ),
-                      child:const  Text('Login'),
+                      child:const  Text('Submit'),
                       onPressed: () {
-                        print(nameController.text);
-                        print(passwordController.text);
+                       // print(nameController.text);
+                        //print(passwordController.text);
                       },
-                    )),
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Text("Don't have account?"),
-                      ElevatedButton(
-                        //textColor: Colors.blue,
-                        child: const Text(
-                          'Sign in',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        onPressed: () {
-                          //signup screen
-                        },
-                      )
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                ))
+                    )),  
               ],
-            )));
+            )))
+    );
   }
-}
+} 
 
-Future login(String username , String password )
-{
+Future addData (String username , int age , double height , double weight )
+async {
   final data = LoginData()
   ..username=username
-  ..password=password;
+  ..age=age
+  ..height=height
+  ..weight=weight;
   
-  setState(() => Data.add(data));
+  //setState(() => Data.add(data));
+  final box = Boxes.getData(); 
+  box.add(data);
+  final mybox = Boxes.getData;
+  mybox.values;
 
-} 
+}
+

@@ -8,7 +8,7 @@ part of 'loginData.dart';
 
 class LoginDataAdapter extends TypeAdapter<LoginData> {
   @override
-  final int typeId = 1122;
+  final int typeId = 0;
 
   @override
   LoginData read(BinaryReader reader) {
@@ -17,18 +17,24 @@ class LoginDataAdapter extends TypeAdapter<LoginData> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return LoginData()
-      ..userName = fields[1] as String
-      ..password = fields[2] as String;
+      ..username = fields[1] as String
+      ..age = fields[2] as int
+      ..height = fields[3] as double
+      ..weight = fields[4] as double;
   }
 
   @override
   void write(BinaryWriter writer, LoginData obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(1)
-      ..write(obj.userName)
+      ..write(obj.username)
       ..writeByte(2)
-      ..write(obj.password);
+      ..write(obj.age)
+      ..writeByte(3)
+      ..write(obj.height)
+      ..writeByte(4)
+      ..write(obj.weight);
   }
 
   @override

@@ -9,6 +9,12 @@ class LoginData extends HiveObject{
 late String username;
   
 @HiveField(2)
-late String password;
+late int age;
+
+@HiveField(3)
+late double height;
+
+@HiveField(4)
+late double weight;
 }
  
